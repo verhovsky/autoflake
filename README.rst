@@ -90,10 +90,11 @@ To remove unused variables, use the ``--remove-unused-variables`` option.
 
 Below is the full listing of options::
 
-    usage: autoflake [-h] [-i] [-r] [--exclude globs] [--imports IMPORTS]
-                     [--expand-star-imports] [--remove-all-unused-imports]
+    usage: autoflake [-h] [-c] [-i] [-s] [-r] [--exclude globs]
+                     [--imports IMPORTS] [--expand-star-imports]
+                     [--remove-all-unused-imports] [--ignore-init-module-imports]
                      [--remove-duplicate-keys] [--remove-unused-variables]
-                     [--version]
+                     [--version] [-v]
                      files [files ...]
 
     Removes unused imports and unused variables as reported by pyflakes.
@@ -105,6 +106,7 @@ Below is the full listing of options::
       -h, --help            show this help message and exit
       -c, --check           return error code if changes are needed
       -i, --in-place        make changes to files instead of printing diffs
+      -s, --show-changes    print diffs when making changes with --in-place
       -r, --recursive       drill down directories recursively
       --exclude globs       exclude file/directory names that match these comma-
                             separated globs
@@ -126,6 +128,8 @@ Below is the full listing of options::
       --remove-unused-variables
                             remove unused variables
       --version             show program's version number and exit
+      -v, --verbose         print more verbose logs (you can repeat `-v` to make
+                            it more verbose)
 
 
 Tests
@@ -150,7 +154,7 @@ Excluding specific lines
 It might be the case that you have some imports for their side effects, even
 if you are not using them directly in that file.
 
-That is common, for example, in Flask based applications. In where you import
+This is common, for example, in Flask based applications. Where you import
 Python modules (files) that imported a main ``app``, to have them included in
 the routes.
 
@@ -170,4 +174,4 @@ To prevent that, without having to exclude the entire file, you can add a
 
     from .endpoints import role, token, user, utils  # noqa
 
-That line will instruct ``autoflake`` to let that specific line as is.
+That line will instruct ``autoflake`` to leave that specific line as is.

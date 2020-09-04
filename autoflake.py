@@ -45,7 +45,7 @@ import pyflakes.messages
 import pyflakes.reporter
 
 
-__version__ = '1.4'
+__version__ = '1.5'
 
 
 _LOGGER = logging.getLogger('autoflake')
@@ -844,7 +844,7 @@ def fix_file(filename, args, standard_out):
                                     encoding=encoding) as output_file:
                 output_file.write(filtered_source)
             _LOGGER.info('Fixed %s', filename)
-        else:
+        if (not args.in_place) or (args.in_place and args.show_changes):
             diff = get_diff_text(
                 io.StringIO(original_source).readlines(),
                 io.StringIO(filtered_source).readlines(),
@@ -997,6 +997,8 @@ def _main(argv, standard_out, standard_error):
                         help='return error code if changes are needed')
     parser.add_argument('-i', '--in-place', action='store_true',
                         help='make changes to files instead of printing diffs')
+    parser.add_argument('-s', '--show-changes', action='store_true',
+                        help='print diffs when making changes with --in-place')
     parser.add_argument('-r', '--recursive', action='store_true',
                         help='drill down directories recursively')
     parser.add_argument('--exclude', metavar='globs',
